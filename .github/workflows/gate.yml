@@ -1,0 +1,36 @@
+name: proof-of-play
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: node --test wire.test.mjs
+      # ⚑ Pinned. An unpinned gate is a gate somebody else can change.
+      - name: witness — the wire law re-proves itself, forever
+        run: |
+          git clone --depth 1 --branch v0.6 https://github.com/sjgant80-hub/witness.git /tmp/witness
+          node /tmp/witness/witness.mjs mutate wire.mjs --timeout 60000 --cap 400 --test node --test wire.test.mjs | tee verdict.txt
+          grep -q '"clean": true' verdict.txt || { echo "::error::mutants survived — the gate is not clean"; exit 1; }
+      - name: the wire, run for real — Ed25519, both directions, attacks refused
+        run: |
+          out=$(node prove-wire.mjs)
+          echo "$out"
+          echo "$out" | grep -q "COLLAPSE ACROSS THE WIRE" || { echo "::error::reuse did not cross"; exit 1; }
+          echo "$out" | grep -q "TAMPERED" || { echo "::error::the tamper attack was not refused"; exit 1; }
+          echo "$out" | grep -q "cannot even be OFFERED" || { echo "::error::the private fold was not refused"; exit 1; }
+          echo "$out" | grep -q "folds, not orders" || { echo "::error::the order was not refused"; exit 1; }
+          echo "$out" | grep -q "THE WIRE HOLDS" || { echo "::error::the proof did not complete"; exit 1; }
+      - name: the page IS the kernel — the rebuild must be a fixpoint
+        run: |
+          node build-page.mjs
+          git diff --exit-code index.html || { echo "::error::index.html drifted from its kernels — rebuild and commit"; exit 1; }
+      - name: the bell — hear the verdict
+        if: always()
+        run: |
+          echo "### 🔔 the verdict, ready to ring — paste it at [the-bell](https://sjgant80-hub.github.io/the-bell/)" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          tail -c 2000 verdict.txt >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo '{"note":"gate did not reach the witness step"}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

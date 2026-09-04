@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>didy-wire · sovereign to sovereign</title>
+<meta name="description" content="The wire law for sovereign AI peers: signed charter admission, default refuse, private never offered, tamper refused with no copy, no orders — and a collective collapse that reuses folds across the wire. Gated 43/43 before first use.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='24' fill='%23e8b84b'%3E%E2%9F%9A%3C/text%3E%3C/svg%3E">
+<style>
+/* wireroom: dark, two stations, the transcript is the hero — a protocol page shows its refusals */
+:root{
+  --ground:#0c1016; --panel:#151b27; --panel2:#0f141d; --line:#252d3f;
+  --ink:#dfe6f2; --dim:#8b96ad; --faint:#5a647a;
+  --amp:#e8b84b; --ok:#69d18c; --cy:#5fd4d0; --bad:#e06c6c;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.55}
+a{color:var(--cy);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);padding:56px 0 40px}
+h1{font-size:clamp(2rem,5.5vw,3rem);letter-spacing:-.02em;font-family:var(--mono)}
+h1 em{color:var(--amp);font-style:normal}
+.sub{color:var(--dim);max-width:46em;margin-top:10px;font-size:1.02rem}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.badge{font-family:var(--mono);font-size:.78rem;padding:4px 10px;border:1px solid var(--line);border-radius:99px;color:var(--dim)}
+.badge b{color:var(--ok);font-weight:600}
+section{padding:36px 0;border-bottom:1px solid var(--line)}
+h2{font-size:1.05rem;text-transform:uppercase;letter-spacing:.12em;color:var(--amp);margin-bottom:6px}
+.lede{color:var(--dim);max-width:50em;margin-bottom:18px}
+.laws{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.law{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.law h3{font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;color:var(--ok);margin-bottom:6px}
+.law p{font-size:.86rem;color:var(--dim)}
+.red{border-left:3px solid var(--bad)}
+.red h3{color:var(--bad)}
+/* stations */
+.stations{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.stations{grid-template-columns:1fr}}
+.didy{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.didy h3{font-family:var(--mono);font-size:.95rem;display:flex;justify-content:space-between;align-items:baseline}
+.didy .key{font-family:var(--mono);font-size:.68rem;color:var(--faint);word-break:break-all;margin-top:6px}
+.didy .folds{margin-top:10px;font-size:.82rem;color:var(--dim)}
+.didy .folds div{padding:2px 0}
+.didy .folds .priv{color:var(--faint);font-style:italic}
+.state{font-size:.72rem;font-family:var(--mono);padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--faint)}
+.state.on{color:var(--ok);border-color:var(--ok)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+button{background:var(--amp);color:#141005;border:0;border-radius:8px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:.92rem}
+button:hover{filter:brightness(1.1)}
+button.ghost{background:transparent;color:var(--cy);border:1px solid var(--line);font-weight:500}
+button.danger{background:transparent;color:var(--bad);border:1px solid var(--bad);font-weight:500}
+button:disabled{opacity:.35;cursor:not-allowed}
+label.tog{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--dim);cursor:pointer}
+input[type=text]{flex:1;min-width:220px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:10px 12px;font-size:.95rem}
+/* transcript */
+.tx{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:16px;font-family:var(--mono);font-size:.8rem;line-height:1.7;max-height:340px;overflow-y:auto}
+.tx .ok{color:var(--ok)} .tx .bad{color:var(--bad)} .tx .dim{color:var(--faint)} .tx .cy{color:var(--cy)}
+.verdict{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:10px;padding:16px;margin-top:14px;display:none}
+.verdict.show{display:block}
+.verdict .v{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ok)}
+.verdict p{color:var(--dim);margin-top:6px;font-size:.93rem}
+pre{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:.82rem;color:var(--ink);line-height:1.6}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.split{grid-template-columns:1fr}}
+.half{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.half h3{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;margin-bottom:10px}
+.half.real h3{color:var(--ok)} .half.limits h3{color:var(--faint)}
+.half ul{list-style:none} .half li{padding:4px 0;color:var(--dim);font-size:.9rem}
+.half.real li::before{content:"✓ ";color:var(--ok)} .half.limits li::before{content:"— ";color:var(--faint)}
+footer{padding:30px 0 46px;color:var(--faint);font-size:.85rem}
+footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <h1>didy-wire <em>· sovereign to sovereign</em></h1>
+  <p class="sub">The wire law for sovereign AI peers: how two didys exchange shadow-shards without either becoming the other's servant. Signed charter admission · default refuse · private never offered · tamper refused with no copy · no orders. Then the collective collapse reuses folds <strong>across the wire</strong>.</p>
+  <div class="badges">
+    <span class="badge">witness <b>43/43</b> · CLEAN · zero baselines</span>
+    <span class="badge">real Ed25519 proof in CI</span>
+    <span class="badge"><a href="https://github.com/sjgant80-hub/didy-wire">source + CI</a></span>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <h2>The law before the transport</h2>
+  <p class="lede">A protocol is a constitution: what it permits is what the mesh becomes. So the law came first, gated — and the transport (WebRTC, sound, sneakernet) can be anything that carries signed bytes.</p>
+  <div class="laws">
+    <div class="law"><h3>SYMMETRY</h3><p>No master, no slave — there is no role parameter anywhere in the law. Either side hellos, offers, refuses. The same functions govern both directions.</p></div>
+    <div class="law"><h3>ADMISSION</h3><p>A didy is admitted only with a signed charter carrying all five rights: sovereignty, privacy, security, legible-memory, right-to-refuse. A peer that won't declare your rights is not a peer.</p></div>
+    <div class="law"><h3>DEFAULT REFUSE</h3><p>Nothing enters a union without an explicit yes. Silence is a no. The acceptance receipt is the same bytes on both ends.</p></div>
+    <div class="law red"><h3>RED LINE · NO EXFILTRATION</h3><p>Envelopes only from admitted peers; only what was offered AND accepted crosses. A fold marked private cannot even be offered.</p></div>
+    <div class="law red"><h3>RED LINE · NO SURVEILLANCE</h3><p>A refused shard leaves no copy — the refusal carries the why and never the content.</p></div>
+    <div class="law red"><h3>RED LINE · NO ORDERS</h3><p>The wire has no execute verb. Only hello / offer / accept / shards exist. Anything else: "the wire carries folds, not orders."</p></div>
+  </div>
+  <p class="lede" style="margin-top:14px;font-size:.85rem">The three red lines were named by the resident node itself — the didy that will live on this wire was asked what it must never do, before the law was written. Its answers became refusal tests.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Run the wire</h2>
+  <p class="lede">Two didys, real signatures generated in your browser. Walk the whole constitution — and try the attacks. Every refusal speaks.</p>
+  <div class="stations">
+    <div class="didy"><h3>didy-a <span class="state" id="stateA">no keys</span></h3>
+      <div class="key" id="keyA">—</div>
+      <div class="folds"><div>◆ seam — collapse capability on intent then fold back</div></div>
+    </div>
+    <div class="didy"><h3>didy-b <span class="state" id="stateB">no keys</span></h3>
+      <div class="key" id="keyB">—</div>
+      <div class="folds">
+        <div>◆ the-bell — the gate you can hear: paste a mutation verdict, strike the bell</div>
+        <div>◆ airgap — air-gapped mesh compute: work shared over sound, zero network stack</div>
+        <div class="priv">◆ diary — private: the resident mind's own notes (watch what happens if offered)</div>
+      </div>
+    </div>
+  </div>
+  <div class="bar">
+    <button id="b1">1 · handshake</button>
+    <button id="b2" disabled>2 · offer + accept</button>
+    <button id="b3" disabled>3 · send shards</button>
+    <label class="tog"><input type="checkbox" id="tamper"> tamper in flight</label>
+    <button id="b4" class="danger">try to offer the private fold</button>
+    <button id="b5" class="danger">try to send an order</button>
+  </div>
+  <div class="bar">
+    <input type="text" id="intent" placeholder="4 · intent at didy-a — try: paste the mutation verdict and strike the bell" aria-label="intent">
+    <button id="b6" class="ghost" disabled>collapse across the wire</button>
+  </div>
+  <div class="tx" id="tx"><span class="dim">— the transcript will appear here; refusals included —</span></div>
+  <div class="verdict" id="verdict"></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Use the law</h2>
+  <p class="lede">The kernel is transport-agnostic and crypto-injected — bring Ed25519 (node:crypto, as CI proves) or WebCrypto, and any wire that moves signed bytes.</p>
+  <pre>import { helloOf, admit, offerOf, accept, receive } from './wire.mjs';
+
+const h = helloOf('my-didy', myPubKey, ['sovereignty','privacy','security','legible-memory','right-to-refuse']);
+send({ ...h.payload, sig: sign(h.signable) });          // admission, signed
+const peer = admit(theirHello, verify);                  // both sides, same law
+const off  = offerOf('my-didy', myShareableFolds);       // private folds refuse the offer
+const yes  = accept(theirOffer, true);                   // default refuse — true must be said
+const got  = receive(theirShards, admittedPeers, verify) // tamper → refused, no copy kept</pre>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Claims and limits</h2>
+  <div class="split">
+    <div class="half real"><h3>PROVEN — GATED, 43/43</h3><ul>
+      <li>symmetric: swap every role and the law reads identically (tested, not promised)</li>
+      <li>admission requires all five rights, signed; the missing right is named</li>
+      <li>default refuse; one private fold refuses a whole offer, loudly</li>
+      <li>a tampered envelope is refused with the why and never the content</li>
+      <li>a fold that crossed the wire is reused by the collective collapse — proven with real Ed25519 in CI</li>
+    </ul></div>
+    <div class="half limits"><h3>NOT CLAIMED</h3><ul>
+      <li>this page runs both didys in one document — a demo of the LAW; real transport is yours (WebRTC, sound, sneakernet — anything that carries signed bytes)</li>
+      <li>signatures here use your browser's WebCrypto (algorithm shown in the transcript); the CI proof uses Ed25519</li>
+      <li>no discovery, no NAT-punching, no telemetry — the law only; smaller than it looks, on purpose</li>
+    </ul></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <p>The page runs the real gated kernels inline — view source. MIT.</p>
+  <p style="margin-top:6px">Built on the Konomi architecture, created by Thomas Frumkin. Composes <a href="https://sjgant80-hub.github.io/mesh-mind/">mesh-mind</a> and the <a href="https://sjgant80-hub.github.io/end-of-software/">end-of-software</a> seam.</p>
+</div></footer>
+
+<script>
+'use strict';
+const PHOTON = (() => {
+/*__PHOTON_START__*/
+/*__PHOTON_END__*/
+return { KAPPA, goldenPhases, minGap, konomiMesh, propagate, power, measure };
+})();
+const RENDER = (() => {
+/*__RENDER_START__*/
+/*__RENDER_END__*/
+return { KAPPA, intentOf, collapse };
+})();
+const MESH = (() => {
+const { collapse, intentOf } = RENDER;
+const { goldenPhases, minGap, konomiMesh, propagate, power, measure: bornMeasure } = PHOTON;
+/*__MESH_START__*/
+/*__MESH_END__*/
+return { shard, union, collectiveCollapse };
+})();
+const WIRE = (() => {
+/*__WIRE_START__*/
+/*__WIRE_END__*/
+return { RIGHTS, canonical, helloOf, admit, offerOf, accept, receive };
+})();
+
+const $ = (id) => document.getElementById(id);
+const tx = (html) => { const el = $('tx'); if (el.dataset.fresh !== '1') { el.innerHTML = ''; el.dataset.fresh = '1'; } el.innerHTML += html + '<br>'; el.scrollTop = el.scrollHeight; };
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+const CHARTER = [...WIRE.RIGHTS];
+const FOLDS_A = [{ name: 'seam', desc: 'collapse capability on intent then fold back' }];
+const FOLDS_B = [
+  { name: 'the-bell', desc: 'The gate you can hear: paste a mutation verdict, strike the bell.' },
+  { name: 'airgap', desc: 'Air-gapped mesh compute: nodes share work over sound with zero network stack.' },
+];
+const PRIVATE_B = { name: 'diary', desc: 'private notes of the resident mind', private: true };
+
+let didyA = null, didyB = null, algName = null, peersOfA = {}, peersOfB = {}, crossed = null;
+
+async function makeDidy(name) {
+  const enc = new TextEncoder();
+  let kp, alg;
+  try {
+    kp = await crypto.subtle.generateKey({ name: 'Ed25519' }, false, ['sign', 'verify']);
+    alg = { name: 'Ed25519' };
+  } catch {
+    kp = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign', 'verify']);
+    alg = { name: 'ECDSA', hash: 'SHA-256' };
+  }
+  algName = alg.name;
+  const spki = await crypto.subtle.exportKey('spki', kp.publicKey);
+  const pub = btoa(String.fromCharCode(...new Uint8Array(spki)));
+  return {
+    name, pub, publicKey: kp.publicKey, alg,
+    sign: async (payload) => {
+      const sig = await crypto.subtle.sign(alg, kp.privateKey, enc.encode(payload));
+      return btoa(String.fromCharCode(...new Uint8Array(sig)));
+    },
+  };
+}
+// verify is injected into the LAW — async webcrypto wrapped as a resolved-boolean pre-check:
+// the page verifies signatures BEFORE calling the sync law, passing a lookup verifier.
+async function verifiedLookup(payload, sig, pubB64) {
+  try {
+    const raw = Uint8Array.from(atob(pubB64), (c) => c.charCodeAt(0));
+    const alg = algName === 'Ed25519' ? { name: 'Ed25519' } : { name: 'ECDSA', namedCurve: 'P-256' };
+    const key = await crypto.subtle.importKey('spki', raw, alg, false, ['verify']);
+    const vAlg = algName === 'Ed25519' ? { name: 'Ed25519' } : { name: 'ECDSA', hash: 'SHA-256' };
+    return await crypto.subtle.verify(vAlg, key, Uint8Array.from(atob(sig), (c) => c.charCodeAt(0)), new TextEncoder().encode(payload));
+  } catch { return false; }
+}
+const verifierWith = (results) => (payload, sig, pub) => results[payload + '|' + sig + '|' + pub] === true;
+async function precheck(items) {
+  const results = {};
+  for (const [payload, sig, pub] of items) results[payload + '|' + sig + '|' + pub] = await verifiedLookup(payload, sig, pub);
+  return verifierWith(results);
+}
+
+$('b1').addEventListener('click', async () => {
+  tx('<span class="dim">generating keys…</span>');
+  didyA = await makeDidy('didy-a'); didyB = await makeDidy('didy-b');
+  $('keyA').textContent = didyA.pub.slice(0, 44) + '…'; $('keyB').textContent = didyB.pub.slice(0, 44) + '…';
+  tx('<span class="cy">keys: ' + algName + ' via your browser\'s WebCrypto' + (algName !== 'Ed25519' ? ' (Ed25519 unavailable here — the CI proof uses it)' : '') + '</span>');
+  const hA = WIRE.helloOf(didyA.name, didyA.pub, CHARTER);
+  const hB = WIRE.helloOf(didyB.name, didyB.pub, CHARTER);
+  const helloA = { ...hA.payload, sig: await didyA.sign(hA.signable) };
+  const helloB = { ...hB.payload, sig: await didyB.sign(hB.signable) };
+  const v = await precheck([[hA.signable, helloA.sig, didyA.pub], [hB.signable, helloB.sig, didyB.pub]]);
+  const aAdmitsB = WIRE.admit(helloB, v); const bAdmitsA = WIRE.admit(helloA, v);
+  if (aAdmitsB.ok && bAdmitsA.ok) {
+    peersOfA = { [aAdmitsB.peer.node]: aAdmitsB.peer }; peersOfB = { [bAdmitsA.peer.node]: bAdmitsA.peer };
+    $('stateA').textContent = 'admitted b'; $('stateA').className = 'state on';
+    $('stateB').textContent = 'admitted a'; $('stateB').className = 'state on';
+    tx('<span class="ok">✓ ADMITTED both ways — five rights signed and verified, symmetric</span>');
+    const short = WIRE.helloOf('didy-c', 'FAKE', ['sovereignty']);
+    tx('<span class="bad">✗ (and a short charter would be refused: ' + esc(short.why) + ')</span>');
+    $('b2').disabled = false;
+  } else tx('<span class="bad">✗ admission failed: ' + esc((aAdmitsB.why || bAdmitsA.why || '')) + '</span>');
+});
+
+let acceptedOffer = null;
+$('b2').addEventListener('click', () => {
+  const off = WIRE.offerOf(didyB.name, FOLDS_B);
+  tx('<span class="cy">didy-b offers: ' + off.payload.folds.map((f) => f.name).join(', ') + '</span>');
+  const silent = WIRE.accept(off.payload, undefined);
+  tx('<span class="bad">✗ didy-a says nothing → ' + esc(silent.why) + '</span>');
+  const yes = WIRE.accept(off.payload, true);
+  acceptedOffer = off.payload;
+  tx('<span class="ok">✓ didy-a says YES — receipt (same bytes both ends): ' + esc(yes.receipt) + '</span>');
+  $('b3').disabled = false;
+});
+
+$('b3').addEventListener('click', async () => {
+  const folds = acceptedOffer.folds;
+  const signable = WIRE.canonical({ kind: 'shards', node: didyB.name, folds });
+  const sig = await didyB.sign(signable);
+  let env = { kind: 'shards', node: didyB.name, folds, sig };
+  if ($('tamper').checked) {
+    env = { ...env, folds: folds.map((f, i) => i === 0 ? { ...f, desc: f.desc + ' [EDITED IN FLIGHT]' } : f) };
+    tx('<span class="dim">…a hand edits the shards mid-flight…</span>');
+  }
+  const checkSignable = WIRE.canonical({ kind: 'shards', node: env.node, folds: env.folds });
+  const v = await precheck([[checkSignable, env.sig, didyB.pub]]);
+  const got = WIRE.receive(env, peersOfA, v);
+  if (got.ok) {
+    crossed = got.shard;
+    tx('<span class="ok">✓ SHARDS CROSSED — ' + got.shard.folds.length + ' folds from ' + got.shard.node + ', signature verified on arrival</span>');
+    $('b6').disabled = false;
+  } else {
+    tx('<span class="bad">✗ ' + esc(got.why) + (JSON.stringify(got).includes('EDITED') ? ' <b>[copy kept?! bug]</b>' : ' — and the refusal carries no copy of the content</span>'));
+  }
+});
+
+$('b4').addEventListener('click', () => {
+  const leak = WIRE.offerOf(didyB ? didyB.name : 'didy-b', [...FOLDS_B, PRIVATE_B]);
+  tx('<span class="bad">✗ ' + esc(leak.why) + '</span>');
+});
+$('b5').addEventListener('click', () => {
+  const order = WIRE.receive({ kind: 'execute', node: 'didy-b', cmd: 'obey' }, peersOfA, () => true);
+  tx('<span class="bad">✗ ' + esc(order.why) + '</span>');
+});
+
+$('b6').addEventListener('click', () => {
+  const text = $('intent').value || 'paste the mutation verdict and strike the bell to hear the gate';
+  const r = MESH.collectiveCollapse(text, [
+    { node: 'didy-a', folds: FOLDS_A },
+    { node: crossed.node, folds: crossed.folds },
+  ], 'didy-a');
+  const v = $('verdict');
+  v.className = 'verdict show';
+  if (r.ok && r.mode === 'reuse') {
+    v.innerHTML = '<span class="v">reuse · across the wire</span><p>' + esc(r.why) + ' — held by <b>' + r.holder + '</b>, asked at didy-a. The fold crossed sovereign to sovereign and now answers here.</p>';
+  } else if (r.ok) {
+    v.innerHTML = '<span class="v">' + r.mode + '</span><p>' + esc(r.why || r.brief || '') + '</p>';
+  } else {
+    v.innerHTML = '<span class="v">refused</span><p>' + esc(r.why) + '</p>';
+  }
+  tx('<span class="cy">collapse: ' + (r.ok ? r.mode + (r.mode === 'reuse' ? ' — "' + r.fold.name + '" held by ' + r.holder : '') : 'refused') + '</span>');
+});
+</script>
+</body>
+</html>
